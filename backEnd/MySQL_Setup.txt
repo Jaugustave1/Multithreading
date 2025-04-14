@@ -1,0 +1,98 @@
+# Create and switch to database
+# create database taskproject;
+use taskproject;
+
+# Create user table
+create table user (
+    dateJoined date NOT NULL,
+    name varchar(20) NOT NULL,
+    email varchar(100),
+    password varchar(20) NOT NULL,
+    userID int NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (userID)
+);
+# Create user
+INSERT INTO user (dateJoined, name, email, password)
+VALUES (CURDATE(), "Jalan", "testemail@gmail.com", "testpass");
+
+# Display user table
+SELECT * FROM user;
+
+# Create tasklist table
+create table tasklist (
+    ownerID int NOT NULL,
+    title varchar(20) NOT NULL,
+    listID int NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (listID),
+    FOREIGN KEY (ownerID) REFERENCES user(userID)
+);
+
+# Create a tasklist
+INSERT INTO tasklist (ownerID, title)
+VALUES (1,"testTitle");
+
+# Display tasklist table
+SELECT * FROM tasklist;
+
+# Create task table
+create table task (
+    userID int NOT NULL,
+    listID int NOT NULL,
+    taskName varchar(20),
+    status varchar(20),
+    priority int DEFAULT 1,
+    dueDate datetime,
+    colorCode int NOT NULL, # Convert to Hex when grabbing
+    taskID int NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (taskID),
+    FOREIGN KEY (userID) REFERENCES  user(userID),
+    FOREIGN KEY (listID) REFERENCES tasklist(listID)
+);
+
+# Create a task
+INSERT INTO task (userID, listID, taskName, status, dueDate, colorCode)
+VALUES (1, 1, "TestTask1", "Finished", CURRENT_TIME, 1);
+
+# Show all tasks
+SELECT * FROM task;
+
+# Create collaboration table
+create table collaboration (
+    role varchar(20), # I'm not sure what this is
+    collaborationID int NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (collaborationID) # I need to look more into how to store users that are in collaboration
+);
+
+# Create Notification table
+create table notification (
+    userID int NOT NULL,
+    message varchar(20) NOT NULL,
+    status varchar(20),
+    createdAt date NOT NULL, # MM/DD/YYYY
+    notificationID int NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (notificationID),
+    FOREIGN KEY (userID) REFERENCES user(userID)
+);
+
+# Create calendar table
+create table calendar (
+    eventTime datetime NOT NULL,
+    userID int NOT NULL,
+    taskID int NOT NULL,
+    calendarID int NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (calendarID),
+    FOREIGN KEY (userID) REFERENCES user(userID),
+    FOREIGN KEY (taskID) REFERENCES task(taskID)
+);
+
+
+# create admin for testing purposes, instead of leaking root password
+CREATE USER 'admin'@'localhost' IDENTIFIED BY "TestPassword1";
+GRANT ALL ON taskproject.* TO 'admin'@'localhost';
+FLUSH PRIVILEGES
+
+# Remove comment to delete admin account
+# DROP USER 'admin'@'localhost';
+
+# Reset all data
+# drop table calendar; drop table notification; drop table collaboration; drop table task; drop table tasklist; drop table user; drop user 'admin'@'localhost'; FLUSH PRIVILEGES;
