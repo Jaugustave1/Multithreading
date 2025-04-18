@@ -3,6 +3,7 @@ import java.sql.*;
 /*
 TODO: Figure out how to store multiple userIDs under collaboration
 */
+// This class handles all table Queries/Creation of data
 
 public class sqlDB {
     private Connection conn;
