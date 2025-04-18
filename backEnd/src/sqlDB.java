@@ -1,5 +1,9 @@
 import java.sql.*;
 
+/*
+TODO: Figure out how to store multiple userIDs under collaboration
+*/
+
 public class sqlDB {
     private Connection conn;
 
@@ -7,6 +11,13 @@ public class sqlDB {
         this.openConnection();
     }
 
+    /* =====================================
+              Connection Creation
+    ===================================== */
+
+    // Could Potentially Use 2 accounts
+    // One for reading only (Prevents SQL Injection to modify table)
+    // Second for Read/Write
     private void openConnection() {
         try {
             // Create mySQL Connection
@@ -26,11 +37,53 @@ public class sqlDB {
         }
     }
 
+    // DELETE LATER, THIS SHOULD NOT PASS INTO PUBLIC BUILD
+    // DELETE LATER, THIS SHOULD NOT PASS INTO PUBLIC BUILD
+    // DELETE LATER, THIS SHOULD NOT PASS INTO PUBLIC BUILD
+    // DELETE LATER, THIS SHOULD NOT PASS INTO PUBLIC BUILD
+    public Connection getConnection() { return this.conn; }
+
+    /* =====================================
+              User Table Functions
+    ===================================== */
+
+    // Creates new User in database
+    // Input: Username, password
+    public void register(String username, String password) {
+        try {
+            String query = "INSERT INTO user (name, password, email) VALUES (?, ?, NULL)";
+            // Prepared statement to prevent SQL Injection
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    // Overloading parameter if email is provided
+    public void register(String username, String password, String email) {
+        try {
+            String query = "INSERT INTO user (name, password, email) VALUES (?, ?, ?)";
+            // Prepared statement to prevent SQL Injection
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ps.setString(3, email);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     // Checks User/Password and returns userID if Valid
+    // Input: name, password
     // Returns -1 if Invalid
-    public int checkLogin( String name, String pass) {
+    public int login( String name, String pass ) {
         try {
             String query = "Select userID FROM user WHERE name = ? AND PASSWORD = ?";
+            // Prepared statement to prevent SQL Injection
             PreparedStatement pstmnt = this.conn.prepareStatement(query);
             pstmnt.setString(1, name);
             pstmnt.setString(2, pass);
@@ -45,12 +98,101 @@ public class sqlDB {
         return -1;
     }
 
+    // Updates name, password, and email for a given userID
+    // Input: userID (int), name, password, email
+    public void updateProfile(int userID, String name, String password, String email) {
+        try {
+            String query = "UPDATE user SET name = ?, password = ?, email = ? WHERE userID = ?";
+            PreparedStatement pstmnt = this.conn.prepareStatement(query);
+            pstmnt.setString(1, name);
+            pstmnt.setString(2, password);
+            pstmnt.setString(3, email);
+            pstmnt.setInt(4, userID);
+            pstmnt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    /* =====================================
+              Task Table Functions
+    ===================================== */
+
+    // Creates task in database
+    // Input: userID, listID, taskName, priority, duedate YYYY-MM-DD HH:MM:SS, colorCode (Range of 0 - 16777215)
+    // Remember to convert colorCode back into Hex later [0x000000 - 0xFFFFFF]
+    public void createTask(int userID, int listID, String name, String status, String priority, String dueDate, int colorCode) {
+        try {
+            String query = "INSERT INTO task (userID, listID, taskName, status, priority, dueDate, colorCode) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstmnt = this.conn.prepareStatement(query);
+            pstmnt.setInt(1, userID);
+            pstmnt.setInt(2, listID);
+            pstmnt.setString(3, name);
+            pstmnt.setString(4, status);
+            pstmnt.setString(5, priority);
+            pstmnt.setString(6, dueDate);
+            pstmnt.setInt(7, colorCode);
+            pstmnt.executeUpdate();
+        } catch ( Exception e ) {
+            System.out.println(e);
+        }
+    }
+
+    // Updates task with taskID with given information
+    // Inputs: taskID, name, status, priority, dueDate, colorCode
+    public void updateTask(int taskID, String name, String status, String priority, String dueDate, int colorCode) {
+        try {
+            String query = "UPDATE task SET taskName = ?, status = ?, priority = ?, dueDate = ?, colorCode = ? WHERE taskID = ?";
+            PreparedStatement pstmnt = this.conn.prepareStatement(query);
+            pstmnt.setString(1, name);
+            pstmnt.setString(2, status);
+            pstmnt.setString(3, priority);
+            pstmnt.setString(4, dueDate);
+            pstmnt.setInt(5, colorCode);
+            pstmnt.setInt(6, taskID);
+            pstmnt.executeUpdate();
+        } catch ( Exception e ) {
+            System.out.println(e);
+        }
+
+    }
+
+
+    /* =====================================
+           Task List Table Functions
+    ===================================== */
+
+
+    /* =====================================
+          Collaboration Table Functions
+    ===================================== */
+
+
+    /* =====================================
+          Notification Table Functions
+    ===================================== */
+
+
+    /* =====================================
+          Calendar Table FUnctions
+    ===================================== */
+
+
+    /* =====================================
+              Additional Functions
+    ===================================== */
 
     // Get all tasks assigned to userID
+    /*
+    TODO: Modify output, return name/user/status/priority/etc
+     Determine method of returning (Array, Tuple, Table, Iterable, etc.)
+     Modify query to also search if task's taskList is in a collaboration user has access to
+    */
     public void getTasks(int userID) {
 
         try {
             String query = "SELECT * FROM task WHERE userID = ? ";
+            // Prepared statement to prevent SQL Injection
             PreparedStatement pstmnt = this.conn.prepareStatement(query);
             pstmnt.setInt(1, userID);
 
