@@ -12,6 +12,30 @@ public class userInterface {
         this.conn = db.getConnection();
     }
 
+
+    /* =====================================
+          Connection Creation
+    ===================================== */
+
+//    private void openConnection() {
+//        try {
+//            // Create mySQL Connection
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskproject", "admin", "TestPassword1");
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//    }
+
+    public void closeConnection() {
+        try {
+            this.conn.close();
+            System.out.println("Connection closed");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public void enforceLogin() throws InvalidAttributeValueException {
         if (this.userID == -1) {
             throw new InvalidAttributeValueException("User not logged in. Login with login(name, pass)");
@@ -30,6 +54,7 @@ public class userInterface {
         return true;
     }
 
+    // Get User's ID
     public int getUserID() { return this.userID; }
 
     // Gets Join Date of user
@@ -42,6 +67,7 @@ public class userInterface {
             pstmnt.setInt(1, this.userID);
 
             ResultSet rset = pstmnt.executeQuery();
+            rset.next();
             return rset.getString("dateJoined");
         } catch (Exception e) {
             System.out.println(e);
@@ -59,6 +85,7 @@ public class userInterface {
             pstmnt.setInt(1, this.userID);
 
             ResultSet rset = pstmnt.executeQuery();
+            rset.next();
             return rset.getString("name");
         } catch (Exception e) {
             System.out.println(e);
@@ -76,6 +103,7 @@ public class userInterface {
             pstmnt.setInt(1, this.userID);
 
             ResultSet rset = pstmnt.executeQuery();
+            rset.next();
             return rset.getString("email");
         } catch (Exception e) {
             System.out.println(e);
@@ -94,6 +122,7 @@ public class userInterface {
             pstmnt.setInt(1, this.userID);
 
             ResultSet rset = pstmnt.executeQuery();
+            rset.next();
             return rset.getString("password");
         } catch (Exception e) {
             System.out.println(e);

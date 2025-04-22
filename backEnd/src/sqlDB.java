@@ -90,6 +90,7 @@ public class sqlDB {
             pstmnt.setString(2, pass);
 
             ResultSet rset = pstmnt.executeQuery();
+            rset.next();
             return rset.getInt("userID");
 
         } catch (Exception e) {
