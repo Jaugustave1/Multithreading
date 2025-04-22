@@ -163,20 +163,87 @@ public class sqlDB {
            Task List Table Functions
     ===================================== */
 
+    // Create a new list with title "title" and list owner
+    // Inputs: userID (Integer), String "title"
+    public void createList(int ownerID, String title) {
+        try {
+            String query = "INSERT INTO tasklist (ownerID, title) VALUES (?, ?)";
+            PreparedStatement pstmnt = this.conn.prepareStatement(query);
+            pstmnt.setInt(1, ownerID);
+            pstmnt.setString(2, title);
+            pstmnt.executeUpdate();
+        } catch ( Exception e ) {
+            System.out.println(e);
+        }
+
+    }
+
+    // Updates title of list
+    // input: Integer listID, Integer OwnerID, String title
+    // todo: Keep ability to switch the OwnerID?
+    public void updateList(int ListID, int ownerID, String title) {
+        try {
+            String query = "UPDATE tasklist SET title = ?, ownerID = ? WHERE listID = ?";
+            PreparedStatement pstmnt = this.conn.prepareStatement(query);
+            pstmnt.setString(1, title);
+            pstmnt.setInt(2, ownerID);
+            pstmnt.setInt(3, ListID);
+            pstmnt.executeUpdate();
+        } catch ( Exception e ) {
+            System.out.println(e);
+        }
+    }
+
+    // Deletes list with specific list ID
+    // input: Integer listID
+    public void deleteList(int ListID) {
+        try {
+            String query = "DELETE FROM tasklist WHERE listID = ?";
+            PreparedStatement pstmnt = this.conn.prepareStatement(query);
+            pstmnt.setInt(1, ListID);
+            pstmnt.executeUpdate();
+        } catch ( Exception e ) {
+            System.out.println(e);
+        }
+    }
+
+    /*
+    todo:
+        AddCollaborator (Figure out how to make collaborations work)
+        popTask (Figure out what exactly we're searching)
+        searchTask (Same as above)
+        iterateTasks (Same as above)
+    */
 
     /* =====================================
           Collaboration Table Functions
     ===================================== */
+
+    /*
+    todo:
+        Figure out how exactly to make this work in MySQL
+     */
 
 
     /* =====================================
           Notification Table Functions
     ===================================== */
 
+    /*
+    todo:
+        Figure out how we're sending notifications
+     */
+
 
     /* =====================================
-          Calendar Table FUnctions
+          Calendar Table Functions
     ===================================== */
+
+    /*
+    todo:
+        Create/Schedule notification
+        Check upcoming events
+     */
 
 
     /* =====================================
