@@ -90,6 +90,7 @@ public class sqlDB {
             pstmnt.setString(2, pass);
 
             ResultSet rset = pstmnt.executeQuery();
+            rset.next();
             return rset.getInt("userID");
 
         } catch (Exception e) {
@@ -222,6 +223,7 @@ public class sqlDB {
     /*
     todo:
         Figure out how exactly to make this work in MySQL
+        https://stackoverflow.com/questions/18605669/how-to-store-multiple-values-in-single-column-where-use-less-memory
      */
 
 
@@ -269,7 +271,7 @@ public class sqlDB {
                 System.out.println("taskID = " + rset.getInt(8) +
                         "\nuserID = " + rset.getInt(1) +
                         "\nlistID = " + rset.getInt(2) +
-                        "\ntaskname = " + rset.getString(3) +
+                        "\ntaskName = " + rset.getString(3) +
                         "\nstatus = " + rset.getString(4) +
                         "\npriority = " + rset.getInt(5) +
                         "\ndueDate = " + rset.getString(6) + // This sketchy
