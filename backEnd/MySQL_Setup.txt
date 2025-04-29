@@ -56,11 +56,18 @@ VALUES (1, 1, "TestTask1", "Finished", CURRENT_TIME, 1);
 # Show all tasks
 SELECT * FROM task;
 
-# Create collaboration table
 create table collaboration (
-    role varchar(20), # I'm not sure what this is
+    listID int, # I'm not sure what this is
     collaborationID int NOT NULL AUTO_INCREMENT,
+    FOREIGN KEY (listID) REFERENCES tasklist(listID),
     PRIMARY KEY (collaborationID) # I need to look more into how to store users that are in collaboration
+);
+
+create table collabUsers (
+    collaborationID int,
+    userID int,
+    FOREIGN KEY (collaborationID) REFERENCES collaboration(collaborationID),
+    FOREIGN KEY (userID) REFERENCES user(userID)
 );
 
 # Create Notification table
