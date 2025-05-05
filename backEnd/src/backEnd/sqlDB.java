@@ -1,3 +1,4 @@
+package backEnd;
 import java.sql.*;
 
 /*
@@ -159,6 +160,17 @@ public class sqlDB {
 
     }
 
+    public ResultSet getAllTasks() {
+        try {
+            String query = "SELECT * FROM task";
+            PreparedStatement pstmnt = this.conn.prepareStatement(query);
+            return pstmnt.executeQuery();
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
 
     /* =====================================
            Task List Table Functions
@@ -258,7 +270,7 @@ public class sqlDB {
      Determine method of returning (Array, Tuple, Table, Iterable, etc.)
      Modify query to also search if task's taskList is in a collaboration user has access to
     */
-    public void getTasks(int userID) {
+    public ResultSet getTasks(int userID) {
 
         try {
             String query = "SELECT * FROM task WHERE userID = ? ";
@@ -267,20 +279,10 @@ public class sqlDB {
             pstmnt.setInt(1, userID);
 
             ResultSet rset = pstmnt.executeQuery("select * from task where userID = " + userID);
-            while (rset.next()) {
-                System.out.println("taskID = " + rset.getInt(8) +
-                        "\nuserID = " + rset.getInt(1) +
-                        "\nlistID = " + rset.getInt(2) +
-                        "\ntaskName = " + rset.getString(3) +
-                        "\nstatus = " + rset.getString(4) +
-                        "\npriority = " + rset.getInt(5) +
-                        "\ndueDate = " + rset.getString(6) + // This sketchy
-                        "\ncolorCode = " + rset.getInt(7)
-                );
-                System.out.print('\n');
-            }
+            return rset;
         } catch (Exception e) {
             System.out.println(e);
+            return null;
         }
     }
 
