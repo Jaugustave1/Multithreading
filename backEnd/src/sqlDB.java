@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.logging.Logger;
+
 
 /*
 TODO: Figure out how to store multiple userIDs under collaboration
@@ -219,6 +221,40 @@ public class sqlDB {
     /* =====================================
           Collaboration Table Functions
     ===================================== */
+
+
+    public void addCollaborator(int collaborationID, int userID) { 
+        String query = "INSERT INTO collabUsers (collaborationID, userID) VALUES (?, ?)"; // Adds Collaborators
+        try (PreparedStatement ps = conn.prepareStatement(query)) { // Protects against SQL Injections
+            ps.setInt(1, collaborationID); // CollabID is assigned to 1st ?/placeholder
+            ps.setInt(2, userID);   // UserID is assigned to 2nd ?/placeholder
+            ps.executeUpdate();     // both queries are inserted into collabUsers ~ links userID to Collaboration
+        } catch (Exception e) {
+            System.out.println("Error adding collaborator: " + e.getMessage());  // displays log if error/issue adding collaborator
+        }
+    }
+    
+    public void removeCollaborator(int collaborationID, int userID) { 
+        String query = "DELETE FROM collabUsers WHERE collaborationID = ? AND userID = ?";  // Deletes Collaborators
+        try (PreparedStatement ps = conn.prepareStatement(query)) { // Protects against SQL Injections
+            ps.setInt(1, collaborationID); 
+            ps.setInt(2, userID);   
+            ps.executeUpdate();     // deletes users Collaboration 
+        } catch (Exception e) {
+            System.out.println("Error removing collaborator: " + e.getMessage()); // displays log if error/issue deleting collaborator
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /*
     todo:
