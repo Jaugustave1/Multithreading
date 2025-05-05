@@ -63,9 +63,10 @@ create table collaboration (
     PRIMARY KEY (collaborationID) # I need to look more into how to store users that are in collaboration
 );
 
-create table collabUsers (
-    collaborationID int,
-    userID int,
+CREATE TABLE collabUsers (
+    collaborationID INT,
+    userID INT,
+    PRIMARY KEY (collaborationID, userID), -- Will prevent against copies/duplicates
     FOREIGN KEY (collaborationID) REFERENCES collaboration(collaborationID),
     FOREIGN KEY (userID) REFERENCES user(userID)
 );
