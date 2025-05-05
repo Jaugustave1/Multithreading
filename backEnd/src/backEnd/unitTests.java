@@ -1,3 +1,5 @@
+package backEnd;
+
 import java.sql.*;
 // test
 
@@ -24,6 +26,11 @@ public class unitTests {
 
         System.out.println("User Interface Test Done");
         System.out.print("\n");
+
+    }
+
+    public static void getTasks(sqlDB db) {
+        ResultSet rs = db.getAllTasks();
 
     }
 
