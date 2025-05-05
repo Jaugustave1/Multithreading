@@ -1,5 +1,7 @@
 package backEnd;
 import java.sql.*;
+import java.util.logging.Logger;
+
 
 /*
 TODO: Figure out how to store multiple userIDs under collaboration
@@ -254,6 +256,16 @@ public class sqlDB {
             System.out.println("Error removing collaborator: " + e.getMessage()); // displays log if error/issue deleting collaborator
         }
     }
+
+
+
+
+
+
+
+
+
+
 
 
     /*
