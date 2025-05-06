@@ -1,39 +1,38 @@
 POST "user/collab/addUser"
 AddCollaborator [Done]
-collabID userID
+collabID (int), userID (int)
 
 POST "user/collab/removeUser"
 removeCollaborator [Done]
-collabID userID
+collabID (int), userID (int)
 
 POST "/user/collab/create"
 createCollaboration [Done]
-listID
+listID (int)
 
 ===================================================================================================================
 
 POST "/user/profile/register"
 register
 name, pass, email [Done]
-name, pass   [Skip]
 
 POST "/user/profile/login" returns userID
 login
-name, pass
+name (str), pass (str)
 
 POST "user/profile/updateProfile"
 updateProfile
-userID, name, pass, email [Done]
+userID (int), name (str), pass (str), email (str) [Done]
 
 ===================================================================================================================
 
 POST "/user/list/createList"
 CreateList
-ownerID, title [Done]
+ownerID (int), title (str) [Done]
 
 POST "/user/list/updateList"
 updateList
-listID, ownerID, title [Done]
+listID (int), ownerID (int), title (str) [Done]
 
 POST "/user/list/deleteList"
 deleteList
@@ -48,8 +47,8 @@ getTasks for user
 
 POST "/user/createTask/{userID}"
 createTask
-userID, listID, taskName, status, priority, duedate (MM/DD/YYYY), colorcode (int)   [Done]
+userID (int), listID (int), taskName (str), status (str), priority (int), duedate (MM/DD/YYYY), colorcode (int)   [Done]
 
 POST "/user/updateTask/{userID}"
 updateTask
-taskID, name, status, priority, duedate (MM/DD/YYYY), colorcode (int)      [Done]
+taskID (int), name (int), status (str), priority (int), duedate (MM/DD/YYYY), colorcode (int)      [Done]
