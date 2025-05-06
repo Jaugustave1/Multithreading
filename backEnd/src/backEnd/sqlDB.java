@@ -307,14 +307,14 @@ public class sqlDB {
      Modify query to also search if task's taskList is in a collaboration user has access to
     */
     public ResultSet getTasks(int userID) {
-        try {
+        try { 
             String query = """
-                SELECT t.*
-                FROM task t
-                JOIN tasklist tl ON t.listID = tl.listID
-                LEFT JOIN collaboration c ON tl.listID = c.listID
-                LEFT JOIN collabUsers cu ON c.collaborationID = cu.collaborationID
-                WHERE cu.userID = ? OR tl.ownerID = ?;
+                SELECT t.*    -- selects /columns/tasks from the task table
+                FROM task t    -- pulls from task
+                JOIN tasklist tl ON t.listID = tl.listID    -- This will connect the tasks to their task list
+                LEFT JOIN collaboration c ON tl.listID = c.listID -- this will link task lists to collaborations
+                LEFT JOIN collabUsers cu ON c.collaborationID = cu.collaborationID -- this will connect collaborators to the task lists
+                WHERE cu.userID = ? OR tl.ownerID = ?;        --  returns tasks to users listed as collaborators. and tasks are returned to the user that owns the tasklist 
             """;
     
             // Prepare statement to prevent SQL Injection
@@ -324,7 +324,7 @@ public class sqlDB {
     
             return pstmnt.executeQuery();
         } catch (Exception e) {
-            System.out.println("Error fetching tasks: " + e.getMessage());
+            System.out.println("Error fetching tasks: " + e.getMessage()); 
             return null;
         }
     }
