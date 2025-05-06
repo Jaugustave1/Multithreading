@@ -1,6 +1,8 @@
 package backEnd;
 import java.sql.*;
-import java.util.logging.Logger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /*
@@ -55,11 +57,13 @@ public class sqlDB {
     // Input: Username, password
     public void register(String username, String password) {
         try {
-            String query = "INSERT INTO user (name, password, email) VALUES (?, ?, NULL)";
+            String query = "INSERT INTO user (dateJoined, name, password, email) VALUES (?, ?, ?, NULL)";
             // Prepared statement to prevent SQL Injection
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, username);
-            ps.setString(2, password);
+            java.sql.Date currDate = new java.sql.Date(System.currentTimeMillis());
+            ps.setDate(1, currDate);
+            ps.setString(2, username);
+            ps.setString(3, password);
             ps.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
@@ -69,12 +73,14 @@ public class sqlDB {
     // Overloading parameter if email is provided
     public void register(String username, String password, String email) {
         try {
-            String query = "INSERT INTO user (name, password, email) VALUES (?, ?, ?)";
+            String query = "INSERT INTO user (dateJoined, name, password, email) VALUES (?, ?, ?, ?)";
             // Prepared statement to prevent SQL Injection
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ps.setString(3, email);
+            java.sql.Date currDate = new java.sql.Date(System.currentTimeMillis());
+            ps.setDate(1, currDate);
+            ps.setString(2, username);
+            ps.setString(3, password);
+            ps.setString(4, email);
             ps.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
@@ -126,7 +132,7 @@ public class sqlDB {
     // Creates task in database
     // Input: userID, listID, taskName, priority, duedate YYYY-MM-DD HH:MM:SS, colorCode (Range of 0 - 16777215)
     // Remember to convert colorCode back into Hex later [0x000000 - 0xFFFFFF]
-    public void createTask(int userID, int listID, String name, String status, String priority, String dueDate, int colorCode) {
+    public void createTask(int userID, int listID, String name, String status, int priority, String dueDate, int colorCode) {
         try {
             String query = "INSERT INTO task (userID, listID, taskName, status, priority, dueDate, colorCode) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmnt = this.conn.prepareStatement(query);
@@ -134,8 +140,21 @@ public class sqlDB {
             pstmnt.setInt(2, listID);
             pstmnt.setString(3, name);
             pstmnt.setString(4, status);
-            pstmnt.setString(5, priority);
-            pstmnt.setString(6, dueDate);
+            pstmnt.setInt(5, priority);
+
+            // Parse Date Correctly
+            // String format Month/Day/Year
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            Date date;
+            try {
+                date = dateFormat.parse(dueDate);
+            } catch (ParseException e) {
+                throw e;
+            }
+            java.sql.Date SQLdueDate = new java.sql.Date(date.getTime());
+
+            pstmnt.setDate(6, SQLdueDate);
+
             pstmnt.setInt(7, colorCode);
             pstmnt.executeUpdate();
         } catch ( Exception e ) {
@@ -145,14 +164,27 @@ public class sqlDB {
 
     // Updates task with taskID with given information
     // Inputs: taskID, name, status, priority, dueDate, colorCode
-    public void updateTask(int taskID, String name, String status, String priority, String dueDate, int colorCode) {
+    public void updateTask(int taskID, String name, String status, int priority, String dueDate, int colorCode) {
         try {
             String query = "UPDATE task SET taskName = ?, status = ?, priority = ?, dueDate = ?, colorCode = ? WHERE taskID = ?";
             PreparedStatement pstmnt = this.conn.prepareStatement(query);
             pstmnt.setString(1, name);
             pstmnt.setString(2, status);
-            pstmnt.setString(3, priority);
-            pstmnt.setString(4, dueDate);
+            pstmnt.setInt(3, priority);
+
+            // Parse Date Correctly
+            // String format Month/Day/Year
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            Date date;
+            try {
+                date = dateFormat.parse(dueDate);
+            } catch (ParseException e) {
+                throw e;
+            }
+            java.sql.Date SQLdueDate = new java.sql.Date(date.getTime());
+            pstmnt.setDate(4, SQLdueDate);
+
+
             pstmnt.setInt(5, colorCode);
             pstmnt.setInt(6, taskID);
             pstmnt.executeUpdate();
@@ -213,7 +245,9 @@ public class sqlDB {
     // input: Integer listID
     public void deleteList(int ListID) {
         try {
-            String query = "DELETE FROM tasklist WHERE listID = ?";
+            // delete all data associated with list from other tables
+
+            String query = "DELETE FROM tasklist WHERE listID = ?"; // Needs to execute last
             PreparedStatement pstmnt = this.conn.prepareStatement(query);
             pstmnt.setInt(1, ListID);
             pstmnt.executeUpdate();
@@ -257,16 +291,17 @@ public class sqlDB {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
+    public void createCollaboration(int listID) {
+        String query = "INSERT INTO collaboration (listID) VALUES (?)";
+        try {
+            PreparedStatement pstmnt = this.conn.prepareStatement(query);
+            pstmnt.setInt(1, listID);
+            pstmnt.executeUpdate(); // Creates new collaboration in database
+            System.out.println("Collaboration created"); // Displays log if successful creation of collaboration
+        } catch (Exception e) {
+            System.out.println("Error creating collaboration: " + e.getMessage());
+        }
+    }
 
     /*
     todo:

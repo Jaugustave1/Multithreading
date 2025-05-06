@@ -3,11 +3,13 @@ package main.java.com.taskServ.servlet;
 import backEnd.sqlDB;
 import java.sql.*;
 
-import com.google.gson.JsonObject;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import main.java.com.taskServ.database.jsonLib;
+import main.java.com.taskServ.database.sharedDB;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -40,9 +42,14 @@ public class userTasks extends HttpServlet {
                     out.println("{\"message\": \"Error getting tasks\"}");
                 }
             }
+            else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.println("{\"message\": \"Invalid path\"}");
+            }
             // Provide more paths if needed
         }
         else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             out.println("{\"message\": \"Invalid path\"}");
         }
     }
@@ -50,51 +57,59 @@ public class userTasks extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
         // Split path into separate parts
         String path = request.getPathInfo();
         String[] pathParts = path.split("/");
 
-        // Check if path is valid
-        if (pathParts.length == 2) {
-            // if path is login
-            // "/user/login/"
-            if (pathParts[1].equals("login")) {
-                // Get form params
-                String name = request.getParameter("name");
-                String password = request.getParameter("pass");
-                try {
-                    int userID = db.login(name, password);
+        // Verify path is valid
+        if ( pathParts.length == 3 ) {
 
-                    // If login is invalid, throw IllegalArgument
-                    if (userID == -1) {
-                        throw new IllegalArgumentException("Invalid username or password");
-                    }
+            // If path is /user/createTask/{userID}
+            if ( pathParts[1].equals("createTask") ) {
+                int userID = Integer.parseInt(pathParts[2]);
 
-                    // form JSON response
-                    JsonObject jsonObj = new JsonObject();
-                    jsonObj.addProperty("userID", userID);
-                    jsonObj.addProperty("message", "Login Successful");
+                int listID = Integer.parseInt(request.getParameter("listID"));
+                String taskName = request.getParameter("taskName");
+                String status = request.getParameter("status");
+                int priority = Integer.parseInt(request.getParameter("priority"));
+                String dueDate = request.getParameter("dueDate");
+                int colorCode = Integer.parseInt(request.getParameter("colorCode"));
 
-                    // Send success response
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    out.println(jsonObj.toString());
-                } catch (IllegalArgumentException e) {
-                    // Handle invalid login
-                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    out.println("{\"message\": \"" + e.getMessage() + "\"}");
-                } catch (Exception e) {
-                    // Handle unexpected errors
-                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    out.println("{\"message\": \"Unexpected error\"}");
-                    e.printStackTrace(); // Log the error
-                }
+                db.createTask(userID, listID, taskName, status, priority, dueDate, colorCode);
+
+                response.setStatus(HttpServletResponse.SC_OK);
+                out.println("{\"message\": \"Task Created\"}");
             }
-        } else {
+
+            // If path is /user/updateTask/{userID}
+            else if ( pathParts[1].equals("updateTask") ) {
+
+                int taskID = Integer.parseInt(request.getParameter("taskID"));
+                String taskName = request.getParameter("taskName");
+                String status = request.getParameter("status");
+                int priority = Integer.parseInt(request.getParameter("priority"));
+                String dueDate = request.getParameter("dueDate");
+                int colorCode = Integer.parseInt(request.getParameter("colorCode"));
+
+                db.updateTask( taskID, taskName, status, priority, dueDate, colorCode);
+                response.setStatus(HttpServletResponse.SC_OK);
+                out.println("{\"message\": \"Task Updated\"}");
+            }
+
+            else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.println("{\"message\": \"Invalid path\"}");
+            }
+
+        }
+        else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             out.println("{\"message\": \"Invalid path\"}");
         }
 
     }
+
+
 }

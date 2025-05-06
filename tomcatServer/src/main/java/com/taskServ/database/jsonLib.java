@@ -1,4 +1,4 @@
-package main.java.com.taskServ.servlet;
+package main.java.com.taskServ.database;
 
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
