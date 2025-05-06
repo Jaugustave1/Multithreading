@@ -1,0 +1,55 @@
+POST "user/collab/addUser"
+AddCollaborator [Done]
+collabID userID
+
+POST "user/collab/removeUser"
+removeCollaborator [Done]
+collabID userID
+
+POST "/user/collab/create"
+createCollaboration [Done]
+listID
+
+===================================================================================================================
+
+POST "/user/profile/register"
+register
+name, pass, email [Done]
+name, pass   [Skip]
+
+POST "/user/profile/login" returns userID
+login
+name, pass
+
+POST "user/profile/updateProfile"
+updateProfile
+userID, name, pass, email [Done]
+
+===================================================================================================================
+
+POST "/user/list/createList"
+CreateList
+ownerID, title [Done]
+
+POST "/user/list/updateList"
+updateList
+listID, ownerID, title [Done]
+
+POST "/user/list/deleteList"
+deleteList
+(FIX delete list later first)
+(Need to delete all foreign keys that reference the list)
+(https://stackoverflow.com/questions/8251146/delete-data-with-foreign-key-in-sql-server-table)   [Unimplemented]
+
+===================================================================================================================
+
+GET "/user/getTasks/{userID}"
+getTasks for user
+
+POST "/user/createTask/{userID}"
+createTask
+userID, listID, taskName, status, priority, duedate (MM/DD/YYYY), colorcode (int)   [Done]
+
+POST "/user/updateTask/{userID}"
+updateTask
+taskID, name, status, priority, duedate (MM/DD/YYYY), colorcode (int)      [Done]
