@@ -307,20 +307,24 @@ public class sqlDB {
      Modify query to also search if task's taskList is in a collaboration user has access to
     */
     public ResultSet getTasks(int userID) {
-
         try {
-            String query = "SELECT * FROM task WHERE userID = ? ";
-            // Prepared statement to prevent SQL Injection
+            String query = """
+                SELECT t.*
+                FROM task t
+                JOIN tasklist tl ON t.listID = tl.listID
+                LEFT JOIN collaboration c ON tl.listID = c.listID
+                LEFT JOIN collabUsers cu ON c.collaborationID = cu.collaborationID
+                WHERE cu.userID = ? OR tl.ownerID = ?;
+            """;
+    
+            // Prepare statement to prevent SQL Injection
             PreparedStatement pstmnt = this.conn.prepareStatement(query);
             pstmnt.setInt(1, userID);
-
-            ResultSet rset = pstmnt.executeQuery("select * from task where userID = " + userID);
-            return rset;
+            pstmnt.setInt(2, userID);
+    
+            return pstmnt.executeQuery();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Error fetching tasks: " + e.getMessage());
             return null;
         }
     }
-
-
-}
