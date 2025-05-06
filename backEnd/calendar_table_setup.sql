@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS calendar (
+    calendarID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    taskID INT NOT NULL,
+    eventTime DATETIME NOT NULL
+);
+
+INSERT INTO calendar (userID, taskID, eventTime) VALUES
+(1, 101, '2025-05-08 10:00:00'),
+(2, 102, '2025-05-10 14:30:00');

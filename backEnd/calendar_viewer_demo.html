@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendar Event Viewer</title>
+</head>
+<body>
+    <h2>Upcoming Calendar Events</h2>
+    <div class="calendarDisplay"></div>
+
+    <script>
+    (async () => {
+      const res = await fetch("http://localhost:8080/taskWebApp/calendar/");
+      const arr = await res.json();
+      const div = document.querySelector(".calendarDisplay");
+      let html = "";
+      arr.forEach(event => {
+        html += `
+          <p><strong>Task ID:</strong> ${event.taskID}</p>
+          <p><strong>Event Time:</strong> ${event.eventTime}</p>
+          <hr>`;
+      });
+      div.innerHTML = html;
+    })();
+    </script>
+</body>
+</html>
