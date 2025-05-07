@@ -1,0 +1,23 @@
+Deployment Instructions for Dogether Backend Calendar System
+
+Tools Required:
+- Eclipse IDE for Enterprise Java Developers
+- Apache Tomcat v9.0
+- Java JDK 17 or higher
+
+Steps to Deploy:
+
+1. Open Eclipse.
+2. Go to File > Import > Existing Projects into Workspace.
+3. Browse to and select the DogetherBackend project folder.
+4. Right-click the project > Properties > Java Build Path > Add JARs.
+5. Add javax.servlet-api-4.0.1.jar from the servlet folder.
+6. Make sure the Tomcat server is set up in Eclipse:
+   - Window > Preferences > Server > Runtime Environments
+   - Add Apache Tomcat v9.0 and point to your extracted Tomcat folder.
+7. Right-click the project > Run As > Run on Server.
+8. Open browser and go to: http://localhost:8080/DogetherBackend/CalendarServlet
+
+Testing:
+- The servlet should return or render basic task calendar responses from the server.
+- Console and browser logs will confirm servlet execution.

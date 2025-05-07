@@ -1,0 +1,26 @@
+Project Specifications:
+
+1. Technologies Used:
+   - Java Servlets
+   - Apache Tomcat
+   - Eclipse IDE for Java EE
+   - javax.servlet-api-4.0.1.jar
+
+2. Servlet Structure:
+   - Class: CalendarServlet.java
+   - Extends HttpServlet and overrides doGet()
+   - Outputs calendar task information in HTML format
+
+3. Data Structure:
+   - Each task is represented as a Java object or JSON from server
+   - Fields include: listID, taskID, taskName, dueDate, status, colorCode
+
+4. Deployment:
+   - Configured via web.xml
+   - Accessible via: http://localhost:8080/DogetherBackend/CalendarServlet
+
+5. Project Directory:
+   - `/src`: Contains servlet Java code
+   - `/webapp/WEB-INF/web.xml`: Servlet configuration
+   - `/servlet/`: Contains the servlet API JAR file
+   - `/doc/`: Documentation folder

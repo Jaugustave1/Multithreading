@@ -1,0 +1,21 @@
+Testing Plan:
+
+Test Case 1: Verify Servlet Loads Successfully
+- Input: Launch server and access servlet URL
+- Expected Output: HTML page with list of calendar tasks
+- Result: PASS/FAIL
+
+Test Case 2: Verify Task Fields Display
+- Input: Static task data with all fields populated
+- Expected Output: Task info rendered with listID, taskID, taskName, etc.
+- Result: PASS/FAIL
+
+Test Case 3: Verify Server Runs on Localhost
+- Input: Start Tomcat, run servlet in Eclipse
+- Expected Output: Response on http://localhost:8080/DogetherBackend/CalendarServlet
+- Result: PASS/FAIL
+
+Test Case 4: Verify JAR Import Works
+- Input: Project builds with javax.servlet-api.4.0.1.jar in Build Path
+- Expected Output: No compilation errors
+- Result: PASS/FAIL

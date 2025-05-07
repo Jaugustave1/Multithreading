@@ -1,0 +1,22 @@
+Functional Requirements:
+1. The backend shall provide servlet-based access to calendar tasks.
+2. Users shall be able to retrieve tasks from a server-side data source (static or dynamic).
+3. The servlet shall support handling of task-related attributes such as:
+   - listID
+   - taskID
+   - taskName
+   - dueDate
+   - status
+   - colorCode
+
+Non-Functional Requirements:
+1. The backend must be written in Java using the Servlet API.
+2. The application must run on Apache Tomcat 9.0 or higher.
+3. The servlet must return well-structured HTML content on valid GET requests.
+4. System should be lightweight and deployable within Eclipse.
+
+Environment Requirements:
+- JDK 17+
+- Eclipse IDE
+- Apache Tomcat v9.0
+- javax.servlet-api-4.0.1.jar
