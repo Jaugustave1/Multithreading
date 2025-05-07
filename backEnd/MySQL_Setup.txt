@@ -12,8 +12,8 @@ create table user (
     PRIMARY KEY (userID)
 );
 # Create user
-INSERT INTO user (dateJoined, name, email, password)
-VALUES (CURDATE(), "Jalan", "testemail@gmail.com", "testpass");
+# INSERT INTO user (dateJoined, name, email, password)
+# VALUES (CURDATE(), "Jalan", "testemail@gmail.com", "testpass");
 
 # Display user table
 SELECT * FROM user;
@@ -28,8 +28,8 @@ create table tasklist (
 );
 
 # Create a tasklist
-INSERT INTO tasklist (ownerID, title)
-VALUES (1,"testTitle");
+# INSERT INTO tasklist (ownerID, title)
+# VALUES (1,"testTitle");
 
 # Display tasklist table
 SELECT * FROM tasklist;
@@ -50,8 +50,8 @@ create table task (
 );
 
 # Create a task
-INSERT INTO task (userID, listID, taskName, status, dueDate, colorCode)
-VALUES (1, 1, "TestTask1", "Finished", CURRENT_TIME, 1);
+# INSERT INTO task (userID, listID, taskName, status, dueDate, colorCode)
+# VALUES (1, 1, "TestTask1", "Finished", CURRENT_TIME, 1);
 
 # Show all tasks
 SELECT * FROM task;

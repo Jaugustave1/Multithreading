@@ -36,4 +36,5 @@ This will show events fetched from:
 - Ensure servlet mapping is active (`@WebServlet` or web.xml).
 - Use JDBC for MySQL with correct credentials in `DatabaseConnection.java`.
 
+
 Let Jahelle know if help is needed integrating into the full project.
